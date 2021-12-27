@@ -1,0 +1,375 @@
+[
+	{
+		"DeviceName": "Total",
+		"DeviceConfigUnits": [
+			{
+				"ConfigType": "所有可配置显示项",
+				"NeedConfigParamerter": [
+					"ConfigFilesHide",
+					"GetParametersSerialPortHide",
+					"GetParametersUdpHide",
+					"ConfigParametersSerialPortHide",
+					"ConfigParametersUdpHide",
+					"LocalConnConfigUdp",
+					"LocalConnConfigSerialPort",
+					"DevConfigHide",
+					"DevConfigHide_DeviceId",
+					"DevConfigHide_ActiveCode",
+					"NetConfigHide",
+					"NetConfigHide_AP_BanStation",
+					"NetConfigHide_AP_NetCardName",
+					"NetConfigHide_AP_SafeType",
+					"NetConfigHide_AP_UserName",
+					"NetConfigHide_AP_Password",
+					"NetConfigHide_AP_DhcpStartAddr",
+					"NetConfigHide_AP_DhcpEndAddr",
+					"NetConfigHide_STA_NetCardName",
+					"NetConfigHide_STA_BanStation",
+					"NetConfigHide_STA_SafeType",
+					"NetConfigHide_STA_DhcpBanStation",
+					"NetConfigHide_STA_UserName",
+					"NetConfigHide_STA_Password",
+					"NetConfigHide_IP_NetCardName",
+					"NetConfigHide_IP_NetType",
+					"NetConfigHide_IP_Addr",
+					"NetConfigHide_IP_NetMask",
+					"NetConfigHide_IP_GateWay",
+					"NetConfigHide_IP_Dns",
+					"NetConfigHide_IP_MacAddr",
+					"NetConfigHide_Socket_NetCardName",
+					"NetConfigHide_Socket_Number",
+					"NetConfigHide_Socket_BanStation",
+					"NetConfigHide_Socket_AgreementType",
+					"NetConfigHide_Socket_LocalPort",
+					"NetConfigHide_Socket_RemoteIpAddr",
+					"NetConfigHide_Socket_RemotePort",
+					"NetConfigHide_Socket_ServerConnections",
+					"NetConfigHide_Socket_BufferSize",
+					"SerialPortConfigHide",
+					"SerialPortConfigHide_SerialPortNumber",
+					"SerialPortConfigHide_BaudRate",
+					"SerialPortConfigHide_DataStation",
+					"SerialPortConfigHide_StopStation",
+					"SerialPortConfigHide_CheckStation",
+					"SerialPortConfigHide_HardControlStation",
+					"SerialPortConfigHide_BufferSize",
+					"ModbusConfigHide",
+					"ModbusConfigHide_Addr_Number",
+					"ModbusConfigHide_Addr_BanStation",
+					"ModbusConfigHide_Addr_Addr",
+					"ModbusConfigHide_Addr_SlaveOrMaster",
+					"ModbusConfigHide_Addr_CommunicationMode",
+					"ModbusConfigHide_Addr_Scantime",
+					"ModbusConfigHide_REG_Number",
+					"ModbusConfigHide_REG_CoilAddr",
+					"ModbusConfigHide_REG_CoilNumber",
+					"ModbusConfigHide_REG_DiscAddr",
+					"ModbusConfigHide_REG_DiscNumber",
+					"ModbusConfigHide_REG_KeepAddr",
+					"ModbusConfigHide_REG_KeepNumber",
+					"ModbusConfigHide_REG_InputAddr",
+					"ModbusConfigHide_REG_InputNumber",
+					"MQTTConfigHide",
+					"MQTTConfigHide_AddrAndPort_Identifier",
+					"MQTTConfigHide_AddrAndPort_RemoteAddr",
+					"MQTTConfigHide_AddrAndPort_RemotePort",
+					"MQTTConfigHide_AddrAndPort_ClientId",
+					"MQTTConfigHide_AddrAndPort_BrokerUserName",
+					"MQTTConfigHide_AddrAndPort_BrokerPassword",
+					"MQTTConfigHide_SSL_BanStaiton",
+					"MQTTConfigHide_SSL_VersionNumber",
+					"MQTTConfigHide_RunHeartJumpPackage_BanStation",
+					"MQTTConfigHide_RunHeartJumpPackage_SendData",
+					"MQTTConfigHide_Dev_InfoTopicNumber_No",
+					"MQTTConfigHide_Dev_PublicInfoTopic",
+					"MQTTConfigHide_Dev_SubscribeInfoTopic",
+					"AdButtonParaConfigHide",
+					"AdButtonParaConfigHide_ButtonNum",
+					"AdButtonParaConfigHide_ButtonRunPattern",
+					"AdButtonParaConfigHide_LedmodeTimeout",
+					"GatherPatternConfigHide",
+					"GatherPatternConfigHide_DataUpLoadPattern",
+					"GatherPatternConfigHide_TimerControllerTriggerTime",
+					"GatherPatternConfigHide_HeratJumpData"
+
+
+				]
+			}
+		]
+	},
+	{
+		"DeviceName": "Cpt300",
+		"DeviceConfigUnits": [
+			{
+				"ConfigType": "本地通讯模式",
+				"NeedConfigParamerter": [
+					"ConfigFilesHide",
+					"ConfigParametersUdpHide",
+					"GetParametersUdpHide",
+					"LocalConnConfigUdp"
+				]
+			},
+			{
+				"ConfigType": "通用设备参数配置",
+				"NeedConfigParamerter": [
+					"DevConfigHide",
+					"DevConfigHide_DeviceId",
+					"DevConfigHide_ActiveCode"
+				]
+			},
+			{
+				"ConfigType": "网络配置",
+				"NeedConfigParamerter": [
+					"NetConfigHide",
+					"NetConfigHide_AP_BanStation",
+					"NetConfigHide_AP_NetCardName",
+					"NetConfigHide_AP_SafeType",
+					"NetConfigHide_AP_UserName",
+					"NetConfigHide_AP_Password",
+					"NetConfigHide_AP_DhcpStartAddr",
+					"NetConfigHide_AP_DhcpEndAddr",
+					"NetConfigHide_STA_NetCardName",
+					"NetConfigHide_STA_BanStation",
+					"NetConfigHide_STA_SafeType",
+					"NetConfigHide_STA_DhcpBanStation",
+					"NetConfigHide_STA_UserName",
+					"NetConfigHide_STA_Password",
+					"NetConfigHide_IP_NetCardName",
+					"NetConfigHide_IP_NetType",
+					"NetConfigHide_IP_Addr",
+					"NetConfigHide_IP_NetMask",
+					"NetConfigHide_IP_GateWay",
+					"NetConfigHide_IP_Dns",
+					"NetConfigHide_IP_MacAddr",
+					"NetConfigHide_Socket_NetCardName",
+					"NetConfigHide_Socket_Number",
+					"NetConfigHide_Socket_BanStation",
+					"NetConfigHide_Socket_AgreementType",
+					"NetConfigHide_Socket_LocalPort",
+					"NetConfigHide_Socket_RemoteIpAddr",
+					"NetConfigHide_Socket_RemotePort",
+					"NetConfigHide_Socket_ServerConnections",
+					"NetConfigHide_Socket_BufferSize"
+
+
+				]
+			},
+			{
+				"ConfigType": "串口配置",
+				"NeedConfigParamerter": [
+					"SerialPortConfigHide",
+					"SerialPortConfigHide_SerialPortNumber",
+					"SerialPortConfigHide_BaudRate",
+					"SerialPortConfigHide_DataStation",
+					"SerialPortConfigHide_StopStation",
+					"SerialPortConfigHide_CheckStation",
+					"SerialPortConfigHide_HardControlStation",
+					"SerialPortConfigHide_BufferSize"
+
+				]
+			},
+			{
+				"ConfigType": "Modbus配置",
+				"NeedConfigParamerter": [
+					"ModbusConfigHide",
+					"ModbusConfigHide_Addr_Number",
+					"ModbusConfigHide_Addr_BanStation",
+					"ModbusConfigHide_Addr_Addr",
+					"ModbusConfigHide_Addr_SlaveOrMaster",
+					"ModbusConfigHide_Addr_CommunicationMode",
+					"ModbusConfigHide_Addr_Scantime",
+					"ModbusConfigHide_REG_Number",
+					"ModbusConfigHide_REG_CoilAddr",
+					"ModbusConfigHide_REG_CoilNumber",
+					"ModbusConfigHide_REG_DiscAddr",
+					"ModbusConfigHide_REG_DiscNumber",
+					"ModbusConfigHide_REG_KeepAddr",
+					"ModbusConfigHide_REG_KeepNumber",
+					"ModbusConfigHide_REG_InputAddr",
+					"ModbusConfigHide_REG_InputNumber"
+				]
+			},
+			{
+				"ConfigType": "MQTT终端配置",
+				"NeedConfigParamerter": [
+				]
+			},
+			{
+				"ConfigType": "安灯按钮配置",
+				"NeedConfigParamerter": [
+					"AdButtonParaConfigHide",
+					"AdButtonParaConfigHide_ButtonNum",
+					"AdButtonParaConfigHide_ButtonRunPattern",
+					"AdButtonParaConfigHide_LedmodeTimeout"
+				]
+			},
+			{
+				"ConfigType": "采集器模式设置",
+				"NeedConfigParamerter": [
+					"GatherPatternConfigHide",
+					"GatherPatternConfigHide_DataUpLoadPattern",
+					"GatherPatternConfigHide_TimerControllerTriggerTime",
+					"GatherPatternConfigHide_HeratJumpData"
+				]
+			}
+		]
+	},
+	{
+		"DeviceName": "ADbutton",
+		"DeviceConfigUnits": [
+			{
+				"ConfigType": "本地通讯模式",
+				"NeedConfigParamerter": [
+					"ConfigFilesHide",
+					"GetParametersSerialPortHide",
+					"ConfigParametersSerialPortHide",
+					"LocalConnConfigSerialPort"
+				]
+			},
+			{
+				"ConfigType": "通用配置",
+				"NeedConfigParamerter": [
+					"DevConfigHide",
+					"DevConfigHide_DeviceId",
+					"DevConfigHide_ActiveCode"
+
+				]
+			},
+			{
+				"ConfigType": "网络配置",
+				"NeedConfigParamerter": [
+
+				]
+			},
+			{
+				"ConfigType": "串口配置",
+				"NeedConfigParamerter": [
+					"SerialPortConfigHide",
+					"SerialPortConfigHide_SerialPortNumber",
+					"SerialPortConfigHide_BaudRate",
+					"SerialPortConfigHide_DataStation",
+					"SerialPortConfigHide_StopStation",
+					"SerialPortConfigHide_CheckStation",
+					"SerialPortConfigHide_HardControlStation",
+					"SerialPortConfigHide_BufferSize"
+
+				]
+			},
+			{
+				"ConfigType": "Modbus配置",
+				"NeedConfigParamerter": [
+					"ModbusConfigHide",
+					"ModbusConfigHide_Addr_Number",
+					"ModbusConfigHide_Addr_BanStation",
+					"ModbusConfigHide_Addr_Addr",
+					"ModbusConfigHide_Addr_SlaveOrMaster",
+					"ModbusConfigHide_Addr_CommunicationMode",
+					"ModbusConfigHide_Addr_Scantime",
+					"ModbusConfigHide_REG_Number",
+					"ModbusConfigHide_REG_CoilAddr",
+					"ModbusConfigHide_REG_CoilNumber",
+					"ModbusConfigHide_REG_DiscAddr",
+					"ModbusConfigHide_REG_DiscNumber",
+					"ModbusConfigHide_REG_KeepAddr",
+					"ModbusConfigHide_REG_KeepNumber",
+					"ModbusConfigHide_REG_InputAddr",
+					"ModbusConfigHide_REG_InputNumber"
+				]
+			},
+			{
+				"ConfigType": "MQTT终端配置",
+				"NeedConfigParamerter": [
+				]
+			}
+		]
+	},
+	{
+		"DeviceName": "Cat1-Link",
+		"DeviceConfigUnits": [
+			{
+				"ConfigType": "本地通讯模式",
+				"NeedConfigParamerter": [
+					"ConfigFilesHide",
+					"GetParametersSerialPortHide",
+					"ConfigParametersSerialPortHide",
+					"LocalConnConfigSerialPort"
+				]
+			},
+			{
+				"ConfigType": "通用配置",
+				"NeedConfigParamerter": [
+
+					"DevConfigHide",
+					"DevConfigHide_DeviceId",
+					"DevConfigHide_ActiveCode"
+				]
+			},
+			{
+				"ConfigType": "网络配置",
+				"NeedConfigParamerter": [
+
+				]
+			},
+			{
+				"ConfigType": "串口配置",
+				"NeedConfigParamerter": [
+
+				]
+			},
+			{
+				"ConfigType": "Modbus配置",
+				"NeedConfigParamerter": [
+					"ModbusConfigHide",
+					"ModbusConfigHide_Addr_Number",
+					"ModbusConfigHide_Addr_BanStation",
+					"ModbusConfigHide_Addr_Addr",
+					"ModbusConfigHide_Addr_SlaveOrMaster",
+					"ModbusConfigHide_Addr_CommunicationMode",
+					"ModbusConfigHide_Addr_Scantime",
+					"ModbusConfigHide_REG_Number",
+					"ModbusConfigHide_REG_CoilAddr",
+					"ModbusConfigHide_REG_CoilNumber",
+					"ModbusConfigHide_REG_DiscAddr",
+					"ModbusConfigHide_REG_DiscNumber",
+					"ModbusConfigHide_REG_KeepAddr",
+					"ModbusConfigHide_REG_KeepNumber",
+					"ModbusConfigHide_REG_InputAddr",
+					"ModbusConfigHide_REG_InputNumber"
+				]
+			},
+			{
+				"ConfigType": "MQTT终端配置",
+				"NeedConfigParamerter": [
+					"MQTTConfigHide",
+					"MQTTConfigHide_AddrAndPort_Identifier",
+					"MQTTConfigHide_AddrAndPort_RemoteAddr",
+					"MQTTConfigHide_AddrAndPort_RemotePort",
+					"MQTTConfigHide_AddrAndPort_ClientId",
+					"MQTTConfigHide_AddrAndPort_BrokerUserName",
+					"MQTTConfigHide_AddrAndPort_BrokerPassword",
+					"MQTTConfigHide_SSL_BanStaiton",
+					"MQTTConfigHide_SSL_VersionNumber",
+					"MQTTConfigHide_RunHeartJumpPackage_BanStation",
+					"MQTTConfigHide_RunHeartJumpPackage_SendData",
+					"MQTTConfigHide_Dev_InfoTopicNumber_No",
+					"MQTTConfigHide_Dev_PublicInfoTopic",
+					"MQTTConfigHide_Dev_SubscribeInfoTopic",
+					"GatherPatternConfigHide",
+					"GatherPatternConfigHide_DataUpLoadPattern",
+					"GatherPatternConfigHide_TimerControllerTriggerTime",
+					"GatherPatternConfigHide_HeratJumpData"
+				]
+			},
+			{
+				"ConfigType": "采集模式配置",
+				"NeedConfigParamerter": [
+					"GatherPatternConfigHide",
+					"GatherPatternConfigHide_DataUpLoadPattern",
+					"GatherPatternConfigHide_TimerControllerTriggerTime",
+					"GatherPatternConfigHide_HeratJumpData"
+				]
+			}
+		]
+	}
+
+]

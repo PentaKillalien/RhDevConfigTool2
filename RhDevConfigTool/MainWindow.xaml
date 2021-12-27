@@ -1,0 +1,1628 @@
+﻿<Window x:Class="RhDevConfigTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+        xmlns:local="clr-namespace:RhDevConfigTool" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="RhDevConfigTool" Height="700" Width="700"
+        DataContext="{Binding Source={StaticResource Locator},Path=Main}" 
+        ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button"
+        BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="pu:ButtonHelper.ButtonStyle" 
+            Value="Outline"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=(pu:ButtonHelper.ButtonStyle),RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                    Value="Outline">
+                        <Setter Property="pu:ButtonHelper.CornerRadius"
+                    Value="15"/>
+                        <Setter Property="pu:ButtonHelper.ClickStyle"
+                    Value="Sink"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+        </Window.Resources>
+    <Viewbox>
+        <Canvas Height="700" Width="700">
+    <Grid>
+        <!--通讯设置 左-->
+        <Grid Grid.Column="0" Grid.Row="0">
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Text="本地通讯配置" FontSize="30" Height="35" Margin="10,0,0,0"></TextBlock>
+            </StackPanel>
+            <ScrollViewer Height="600"
+                  Width="300"
+                  Grid.Row="1"
+                  pu:ScrollViewerHelper.ScrollBarThickness="10"
+                  pu:ScrollViewerHelper.ScrollBarCornerRadius="1">
+                <StackPanel x:Name="LocalConfig" Orientation="Vertical" Width="auto" Height="auto">
+                    <GroupBox
+                        Width="300"
+                        Header="Udp通讯配置"
+                        Visibility="{Binding LocalConnConfigUdp}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf0c1;">
+
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel  Orientation="Horizontal">
+                                <ComboBox
+                              ItemsSource="{Binding NetAdapterList}" 
+                              Margin="10,0,10,0"
+                              Height="25"
+                              Width="220"
+                              SelectedValue="{Binding AdapterDescript}"
+                              pu:ComboBoxHelper.Header="适配器 : "
+                              pu:ComboBoxHelper.ItemHeight="25"
+                              pu:ComboBoxHelper.Icon="&#xf03a;" >
+                                                </ComboBox>
+                                                <Button x:Name="Adapter"
+                             Command="{Binding FlushNetworkCard}"           
+                             Grid.Row="2"       
+                            Content="刷新"      
+                            pu:ButtonHelper.ButtonStyle="Outline"
+                            pu:ButtonHelper.CornerRadius="15"
+                            Height="25"
+                            Width="50"></Button>
+                            </StackPanel>
+                            <DataGrid
+                                x:Name="da1"
+                                Width="300"
+                                Height="280"
+                                FontSize="13"
+                                AutoGenerateColumns="False"
+                                ItemsSource="{Binding DeviceInfos}"
+                               pu:DataGridHelper.HeaderPadding="5,0"
+                                pu:DataGridHelper.HeaderMinHeight="25"
+                                pu:DataGridHelper.RowMinHeight="20"
+                               pu:DataGridHelper.CellPadding="5,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding Path=DoubleClickItem}" CommandParameter="{Binding ElementName=da1,Path=SelectedValue}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="设备名" Width="70" Binding="{Binding strName}" />
+                                    <DataGridTextColumn Header="设备IP" Width="110" Binding="{Binding strIpAddress}"/>
+                                    <DataGridTextColumn Header="MAC地址" Width="120" Binding="{Binding strMacAddress}" />
+
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+                            <Button x:Name="Search"
+                                 Grid.Row="2"       
+                                Content="搜索设备" 
+                                Command="{Binding SearchDevices}"
+                                pu:ButtonHelper.ButtonStyle="Outline"
+                                pu:ButtonHelper.CornerRadius="15"
+                                Height="30"
+                                Width="150"></Button>
+                                </StackPanel>
+                        </GroupBox>
+                    <!--本地串口信息显示-->
+                    <GroupBox Height="145"     
+                     Width="300"
+                    Header="本地串口设置"
+                    Visibility="{Binding LocalConnConfigSerialPort}" 
+                     pu:GroupBoxHelper.HeaderPadding="5,10"
+                    pu:GroupBoxHelper.Icon="&#xf0c1;">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Height="25"
+                                          x:Name="SerialPortSelect"
+                        Margin="40,0,20,0"          
+                        Width="200"
+                        ItemsSource="{Binding SerialPortsName}"           
+                        SelectedValue ="{Binding LocalSerialPortConfig_SerialPortOrder}"         
+                        IsEnabled="{Binding LocalSerialPortConfigEnable}"      
+                        pu:ComboBoxHelper.Header="串口选择 : "
+                        pu:ComboBoxHelper.ItemHeight="25"
+                        pu:ComboBoxHelper.CornerRadius="15">
+                                    <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseEnter">
+                                        <i:InvokeCommandAction Command="{Binding Path=GetCanUseSerialPorts}" CommandParameter="{Binding ElementName=SerialPortSelect}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Height="25"
+                        Margin="40,0,20,0"          
+                        Width="200"
+                        IsEnabled="{Binding LocalSerialPortConfigEnable}" 
+                        SelectedValue="{Binding LocalSerialPortConfig_Baud}"          
+                        pu:ComboBoxHelper.Header="波特率    : "
+                        pu:ComboBoxHelper.ItemHeight="25"
+                        pu:ComboBoxHelper.CornerRadius="15">
+                                    <ComboBoxItem Content="1200"></ComboBoxItem>
+                                    <ComboBoxItem Content="2400"></ComboBoxItem>
+                                    <ComboBoxItem Content="4800"></ComboBoxItem>
+                                    <ComboBoxItem Content="9600"></ComboBoxItem>
+                                    <ComboBoxItem Content="19200"></ComboBoxItem>
+                                    <ComboBoxItem Content="38400"></ComboBoxItem>
+                                    <ComboBoxItem Content="57600"></ComboBoxItem>
+                                    <ComboBoxItem Content="115200" IsSelected="True"></ComboBoxItem>
+                                    <ComboBoxItem Content="230400"></ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Height="30"
+                        Margin="40,0,20,0"         
+                        Width="200"
+                        IsChecked="{Binding SerialPortIsChecked}"         
+                        pu:CheckBoxHelper.Header="串口开关 : "
+                        pu:CheckBoxHelper.CheckBoxStyle="Switch"/>
+                                    </StackPanel>
+                                </StackPanel>
+                    </GroupBox>
+                    <!--加载或保存配置文件-->
+                    <GroupBox Height="80"     
+                     Width="300"
+                    Header="配置文件"
+                    Visibility="{Binding ConfigFilesHide}" 
+                     pu:GroupBoxHelper.HeaderPadding="5,10"
+                    pu:GroupBoxHelper.Icon="&#xf0c1;">
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="LoadConfigBtn"
+                            Command="{Binding LoadConfigBtn}"   
+                            Content="加载配置文件"      
+                             pu:ButtonHelper.ButtonStyle="Outline"
+                             pu:ButtonHelper.CornerRadius="15"
+                             Margin="35,0,0,0"       
+                             Height="30"
+                             Width="100"></Button>
+                            <Button x:Name="SaveConfigBtn"
+                            Command="{Binding SaveConfigBtn}"   
+                            Content="保存配置文件"      
+                             pu:ButtonHelper.ButtonStyle="Outline"
+                             pu:ButtonHelper.CornerRadius="15"
+                             Margin="20,0,0,0"       
+                             Height="30"
+                             Width="100"></Button>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="600"></RowDefinition>
+            </Grid.RowDefinitions>
+        </Grid>
+        <!--参数配置 右-->
+        <Grid Grid.Column="1" Grid.Row="0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBlock Text="{Binding DeviceCanConfigParameters}" FontSize="30" Height="35" Margin="10,0,0,0"></TextBlock>
+                    <Button Height="40"
+                        Width="40"
+                        pu:ButtonHelper.Icon="&#xf063;"
+                        pu:ButtonHelper.ButtonStyle="Outline"
+                        pu:ButtonHelper.CornerRadius="15"/>
+                </StackPanel>
+                <ScrollViewer Height="550"
+                  Width="380"
+                  Grid.Row="1"
+                  pu:ScrollViewerHelper.ScrollBarThickness="10"
+                  pu:ScrollViewerHelper.ScrollBarCornerRadius="1">
+                    <StackPanel x:Name="ConfigList" Orientation="Vertical" Width="auto" Height="auto">
+                        <GroupBox
+                        Width="370"
+                        Header="通用设备参数配置"
+                        Visibility="{Binding DevConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf10b;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding DevConfigHide_DeviceId}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             x:Name="DevConfig_DeviceId_CheckName"
+                                             Text="{Binding DevConfig_DeviceId}"
+                                             pu:TextBoxHelper.Header="设备ID         : "
+                                             pu:TextBoxHelper.CornerRadius="15">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseLeave">
+                                                        <i:InvokeCommandAction Command="{Binding Path=DevConfig_DeviceId_Check}" CommandParameter="{Binding ElementName=DevConfig_DeviceId_CheckName}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </TextBox>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Content="配置"
+                                            Command="{Binding Tips_DevConfig_DeviceId}"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="10,0,0,0"
+                                            Command="{Binding Tips_DevConfig_DeviceId}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding DevConfigHide_ActiveCode}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding DevConfig_ActiveCode}"
+                                             IsEnabled="False"
+                                             pu:TextBoxHelper.Header="激活码         : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+
+                                    <Button Height="30"
+                                            Width="30"
+                                            Content="激活"
+                                            Command="{Binding CreateOneActiveCode}"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="10,0,0,0"
+                                            Command="{Binding Tips_DevConfig_ActiveCode}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                        Width="370"
+                        Header="网络配置-无线AP配置"
+                        
+                        Visibility="{Binding NetConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf1eb;">
+                                    <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_NetCardName}" IsEnabled="{Binding NetConfigEnabled}">
+                                            <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             x:Name="NetConfig_AP_NetCardName_xName"
+                                             Text="{Binding NetConfig_AP_NetCardName}"
+                                             pu:TextBoxHelper.Header="网卡名称          : "
+                                             pu:TextBoxHelper.CornerRadius="15">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="TextChanged">
+                                                        <i:InvokeCommandAction Command="{Binding Path=NetConfig_AP_NetCardName_xName_TextChanged}" CommandParameter="{Binding ElementName=NetConfig_AP_NetCardName_xName,Path=Text.Length}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+
+                                            </TextBox>
+
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_NetCardName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_BanStation}">
+                                            
+                                            <CheckBox Height="25"
+                                            Margin="30,0,0,0"         
+                                            Width="240"
+                                            IsChecked="{Binding NetConfig_AP_BanStation_Switch}"
+                                            pu:CheckBoxHelper.Header="使能位             : "          
+                                            pu:CheckBoxHelper.CheckBoxStyle="Switch"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_BanStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_SafeType}" IsEnabled="{Binding NetConfigEnabled}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                      ItemsSource="{Binding NetConfig_AP_SafeType_Arr}"        
+                                      SelectedValue="{Binding NetConfig_AP_SafeType}"        
+                                      pu:ComboBoxHelper.Header="安全类型          : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_SafeType}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_DhcpStartAddr}" IsEnabled="{Binding NetConfigEnabled}">
+                                            <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_AP_DhcpStartAddr}"
+                                             pu:TextBoxHelper.Header="DHCP起始地址 : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_DhcpStartAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_DhcpEndAddr}" IsEnabled="{Binding NetConfigEnabled}">
+                                            <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_AP_DhcpEndAddr}"
+                                             pu:TextBoxHelper.Header="DHCP终止地址 : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_DhcpEndAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_UserName}" IsEnabled="{Binding NetConfigEnabled}">
+                                            <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_AP_UserName}"
+                                             pu:TextBoxHelper.Header="无线AP账号      : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_UserName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_AP_Password}" IsEnabled="{Binding NetConfigEnabled}">
+                                            <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_AP_Password}"
+                                             pu:TextBoxHelper.Header="无线AP密码      : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AP_Password}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                        </StackPanel>
+
+                                    </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                        Width="370"
+                        Header="网络配置-无线STA设置"
+                        Visibility="{Binding NetConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf1eb;">
+                            <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_STA_NetCardName}" IsEnabled="{Binding NetConfigStaEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_STA_NetCardName}"
+                                             pu:TextBoxHelper.Header="网卡名称          : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_STA_NetCardName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_STA_BanStation}" >
+                                            <CheckBox Height="25"
+                                            Margin="30,0,0,0"         
+                                            Width="240"
+                                            IsChecked="{Binding NetConfig_STA_BanStation_Switch}"
+                                            pu:CheckBoxHelper.Header="使能位             : "          
+                                            pu:CheckBoxHelper.CheckBoxStyle="Switch"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_STA_BanStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_STA_SafeType}" IsEnabled="{Binding NetConfigStaEnabled}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"  
+                                      ItemsSource="{Binding NetConfig_STA_SafeType_Arr}"        
+                                      SelectedValue="{Binding NetConfig_STA_SafeType}" 
+                                      pu:ComboBoxHelper.Header="安全类型          : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15" SelectionChanged="ComboBox_SelectionChanged">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_STA_SafeType}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel >
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_STA_DhcpBanStation}" IsEnabled="{Binding NetConfigStaEnabled}">
+                                            <CheckBox Height="25"
+                                            Margin="30,0,0,0"         
+                                            Width="240"
+                                            IsChecked="{Binding NetConfig_STA_DhcpBanStation_Switch}"
+                                            pu:CheckBoxHelper.Header="DHCP使能位    : "          
+                                            pu:CheckBoxHelper.CheckBoxStyle="Switch"/>
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_STA_DhcpBanStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_STA_UserName}" IsEnabled="{Binding NetConfigStaEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_STA_UserName}"
+                                             pu:TextBoxHelper.Header="无线AP账号      : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_STA_UserName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_STA_Password}" IsEnabled="{Binding NetConfigStaEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_STA_Password}"
+                                             pu:TextBoxHelper.Header="无线AP密码      : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_STA_Password}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                        Width="370"
+                        Header="网络配置-网卡IP配置"
+                        Visibility="{Binding NetConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf1eb;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_NetCardName}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_IP_NetCardName}"
+                                             pu:TextBoxHelper.Header="网卡名称          : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_IP_NetCardName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_NetType}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"
+                                      ItemsSource="{Binding NetConfig_IP_NetType_Arr}"
+                                      SelectedValue="{Binding NetConfig_IP_NetType}"        
+                                      pu:ComboBoxHelper.Header="网络模式          : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_IP_NetType}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_Addr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_IP_Addr}"
+                                             pu:TextBoxHelper.Header="IP地址              : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_IP_Addr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_NetMask}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_IP_NetMask}"
+                                             pu:TextBoxHelper.Header="子网掩码          : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_IP_NetMask}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_GateWay}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_IP_GateWay}"      
+                                             pu:TextBoxHelper.Header="网关                 : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_IP_GateWay}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_Dns}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_IP_Dns}"
+                                             pu:TextBoxHelper.Header="DNS                : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_IP_Dns}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_IP_MacAddr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MacAddrStr}"
+                                             IsEnabled="False"
+                                             pu:TextBoxHelper.Header="MAC地址         : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+
+                                    <Button Height="30"
+                                            Width="30"
+                                            Content="生成"
+                                            Command="{Binding CreateOneMacAddr}"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="10,0,0,0"
+                                            Command="{Binding Tips_MacAddrStr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                        Width="370"
+                        Header="网络配置-套接字配置"
+                        Visibility="{Binding NetConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf1eb;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_NetCardName}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_NetCardName}"
+                                             pu:TextBoxHelper.Header="网卡名称              : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_NetCardName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_Number}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_Number}"
+                                             pu:TextBoxHelper.Header="Socket编号          : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_Number}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_BanStation}">
+                                            <CheckBox Height="25"
+                                            Margin="30,0,0,0"         
+                                            Width="240"
+                                            IsChecked="{Binding NetConfig_Socket_BanStation_Switch}"
+                                            pu:CheckBoxHelper.Header="使能位                  : "          
+                                            pu:CheckBoxHelper.CheckBoxStyle="Switch"/>
+
+                                            <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_BanStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_AgreementType}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                              ItemsSource="{Binding NetConfig_Socket_AgreementType_Arr}"
+                                      SelectedValue="{Binding NetConfig_Socket_AgreementType}"        
+                                      pu:ComboBoxHelper.Header="Socket协议类型    : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_AgreementType}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_LocalPort}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_LocalPort}"
+                                             pu:TextBoxHelper.Header="TCP/UDP本地端口  : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_LocalPort}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_RemoteIpAddr}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_RemoteIpAddr}"
+                                             pu:TextBoxHelper.Header="TCP/UDP远程IP   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_RemoteIpAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_RemotePort}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_RemotePort}"
+                                             pu:TextBoxHelper.Header="TCP/UDP远程端口  : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_RemotePort}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_ServerConnections}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_ServerConnections}"
+                                             pu:TextBoxHelper.Header="Server最长连接数  : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_ServerConnections}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding NetConfigHide_Socket_BufferSize}" IsEnabled="{Binding NetConfigSocketEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding NetConfig_Socket_BufferSize}"
+                                             pu:TextBoxHelper.Header="缓冲区大小            : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Socket_BufferSize}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                        Width="370"
+                        Header="串口配置-串口波特率"
+                        Visibility="{Binding SerialPortConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf10c;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_SerialPortNumber}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"   
+                                              ItemsSource="{Binding SerialPortConfig_SerialPortNumber_Arr}"
+                                      SelectedValue="{Binding SerialPortConfig_SerialPortNumber}"        
+                                      pu:ComboBoxHelper.Header="串口编号         : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_SerialPortNumber}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_BaudRate}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                              ItemsSource="{Binding SerialPortConfig_BaudRate_Arr}"
+                                      SelectedValue="{Binding SerialPortConfig_BaudRate}"        
+                                      pu:ComboBoxHelper.Header="波特率            : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_BaudRate}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_DataStation}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"     
+                                        ItemsSource="{Binding SerialPortConfig_DataStation_Arr}"         
+                                      SelectedValue="{Binding SerialPortConfig_DataStation}"        
+                                      pu:ComboBoxHelper.Header="数据位            : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_DataStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_StopStation}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                      ItemsSource="{Binding SerialPortConfig_StopStation_Arr}"        
+                                      SelectedValue="{Binding SerialPortConfig_StopStation}"       
+                                      pu:ComboBoxHelper.Header="停止位            : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_StopStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_CheckStation}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"   
+                                       ItemsSource="{Binding SerialPortConfig_CheckStation_Arr}"       
+                                      SelectedValue="{Binding SerialPortConfig_CheckStation}"             
+                                      pu:ComboBoxHelper.Header="校验位            : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_CheckStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_HardControlStation}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                              ItemsSource="{Binding SerialPortConfig_HardControlStation_Arr}"
+                                      SelectedValue="{Binding SerialPortConfig_HardControlStation}"         
+                                      pu:ComboBoxHelper.Header="硬件流控制位  : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_HardControlStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding SerialPortConfigHide_BufferSize}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding SerialPortConfig_BufferSize}"
+                                             pu:TextBoxHelper.Header="缓冲区大小      : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_SerialPortConfig_BufferSize}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox 
+                        Width="370"
+                        Header="Modbus配置-地址"
+                        Visibility="{Binding ModbusConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf1b9;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_Addr_Number}" IsEnabled="{Binding NetConfigModbusEnabled}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"  
+                                              ItemsSource="{Binding ModbusConfig_Addr_Number_Arr}"
+                                      SelectedValue="{Binding ModbusConfig_Addr_Number}"        
+                                      pu:ComboBoxHelper.Header="Modbus编号   : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Addr_Number}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_Addr_BanStation}">
+                                            <CheckBox Height="25"
+                                            Margin="30,0,0,0"         
+                                            Width="240"
+                                            IsChecked="{Binding ModbusConfig_Addr_BanStation_Switch}"
+                                            pu:CheckBoxHelper.Header="使能位             : "          
+                                            pu:CheckBoxHelper.CheckBoxStyle="Switch"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Addr_BanStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_Addr_Addr}" IsEnabled="{Binding NetConfigModbusEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_Addr_Addr}"
+                                             pu:TextBoxHelper.Header="Modbus地址   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Addr_Addr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_Addr_SlaveOrMaster}" IsEnabled="{Binding NetConfigModbusEnabled}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"  
+                                      ItemsSource="{Binding ModbusConfig_Addr_SlaveOrMaster_Arr}"        
+                                      SelectedValue="{Binding ModbusConfig_Addr_SlaveOrMaster}"        
+                                      pu:ComboBoxHelper.Header="主从模式          : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Addr_SlaveOrMaster}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_Addr_CommunicationMode}" IsEnabled="{Binding NetConfigModbusEnabled}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                      ItemsSource="{Binding ModbusConfig_Addr_CommunicationMode_Arr}"        
+                                      SelectedValue="{Binding ModbusConfig_Addr_CommunicationMode}"        
+                                      pu:ComboBoxHelper.Header="通讯模式          : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Addr_CommunicationMode}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+
+
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_Addr_Scantime}" IsEnabled="{Binding NetConfigModbusEnabled}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_Addr_Scantime}"
+                                             pu:TextBoxHelper.Header="扫描间隔(ms)   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Addr_Scantime}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox 
+                        Width="370"
+                        Header="Modbus配置-寄存器配置"
+                        Visibility="{Binding ModbusConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf1b9;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_Number}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"
+                                      ItemsSource="{Binding ModbusConfig_REG_Number_Arr}"        
+                                      SelectedValue="{Binding ModbusConfig_REG_Number}"       
+                                      pu:ComboBoxHelper.Header="Modbus编号      : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_Number}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+
+
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_CoilAddr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_CoilAddr}"
+                                             pu:TextBoxHelper.Header="线圈寄存器地址   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_CoilAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_CoilNumber}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_CoilNumber}"
+                                             pu:TextBoxHelper.Header="线圈寄存器数量   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_CoilNumber}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_DiscAddr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_DiscAddr}"
+                                             pu:TextBoxHelper.Header="离散量寄存器地址: "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_DiscAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_DiscNumber}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_DiscNumber}"
+                                             pu:TextBoxHelper.Header="离散量寄存器数量: "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_DiscNumber}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_KeepAddr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_KeepAddr}"
+                                             pu:TextBoxHelper.Header="保持寄存器地址   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_KeepAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_KeepNumber}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_KeepNumber}"
+                                             pu:TextBoxHelper.Header="保持寄存器数量   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_KeepNumber}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_InputAddr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_InputAddr}"
+                                             pu:TextBoxHelper.Header="输入寄存器地址   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_InputAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ModbusConfigHide_REG_InputNumber}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding ModbusConfig_REG_InputNumber}"
+                                             pu:TextBoxHelper.Header="输入寄存器数量   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_REG_InputNumber}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox 
+                        Width="370"
+                        Header="MQTT终端配置-远程地址及端口号"
+                        Visibility="{Binding MQTTConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf232;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_AddrAndPort_Identifier}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"
+                                              ItemsSource="{Binding MQTTConfig_AddrAndPort_Identifier_Arr}"
+                                       SelectedValue="{Binding MQTTConfig_AddrAndPort_Identifier}"       
+                                      pu:ComboBoxHelper.Header="客户端标识符    : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AddrAndPort_Identifier}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_AddrAndPort_RemoteAddr}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_AddrAndPort_RemoteAddr}"
+                                             pu:TextBoxHelper.Header="远程地址           : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AddrAndPort_RemoteAddr}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_AddrAndPort_RemotePort}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_AddrAndPort_RemotePort}"
+                                             pu:TextBoxHelper.Header="远程端口           : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AddrAndPort_RemotePort}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_AddrAndPort_ClientId}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_AddrAndPort_ClientId}"
+                                             pu:TextBoxHelper.Header="ClientId            : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AddrAndPort_ClientId}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_AddrAndPort_BrokerUserName}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_AddrAndPort_BrokerUserName}"
+                                             pu:TextBoxHelper.Header="Broker端账号    : "
+                                             pu:TextBoxHelper.Watermark="eg:u001"
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AddrAndPort_BrokerUserName}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_AddrAndPort_BrokerPassword}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_AddrAndPort_BrokerPassword}"
+                                             pu:TextBoxHelper.Header="Broker端密码    : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AddrAndPort_BrokerPassword}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox 
+                        Width="370"
+                        Header="MQTT终端配置-SSL通讯版本"
+                        Visibility="{Binding MQTTConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf232;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_SSL_BanStaiton}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                              ItemsSource="{Binding MQTTConfig_SSL_BanStaiton_Arr}"
+                                      SelectedValue="{Binding MQTTConfig_SSL_BanStaiton}"        
+                                      pu:ComboBoxHelper.Header="使能位               : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_SSL_BanStaiton}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_SSL_VersionNumber}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_SSL_VersionNumber}"
+                                             pu:TextBoxHelper.Header="SSL版本号         : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_SSL_VersionNumber}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox 
+                        Width="370"
+                        Header="MQTT终端配置-运行心跳包"
+                        Visibility="{Binding MQTTConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf232;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_RunHeartJumpPackage_BanStation}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                              ItemsSource="{Binding MQTTConfig_RunHeartJumpPackage_BanStation_Arr}"
+                                      SelectedValue="{Binding MQTTConfig_RunHeartJumpPackage_BanStation}"        
+                                      pu:ComboBoxHelper.Header="使能位                : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_RunHeartJumpPackage_BanStation}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_RunHeartJumpPackage_SendData}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_RunHeartJumpPackage_SendData}"
+                                             pu:TextBoxHelper.Header="心跳包发送数据   : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_RunHeartJumpPackage_SendData}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox 
+                        Width="370"
+                        Header="MQTT终端配置-发布消息主题设定"
+                        Visibility="{Binding MQTTConfigHide}"    
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf232;">
+
+                            <StackPanel Orientation="Vertical">
+                                
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_Dev_InfoTopicNumber_No}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                      ItemsSource="{Binding MQTTConfig_Dev_InfoTopicNumber_No_Arr}"
+                                      SelectedValue="{Binding MQTTConfig_Dev_InfoTopicNumber_No}"
+                                      pu:ComboBoxHelper.Header="消息主题编号     : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Dev_InfoTopicNumber_No}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_Dev_PublicInfoTopic}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_Dev_PublicInfoTopic}"
+                                             pu:TextBoxHelper.Header="发布消息主题     : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Dev_PublicInfoTopic}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding MQTTConfigHide_Dev_SubscribeInfoTopic}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding MQTTConfig_Dev_SubscribeInfoTopic}"
+                                             pu:TextBoxHelper.Header="订阅消息主题     : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_Dev_SubscribeInfoTopic}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                        Width="370"
+                        Header="安灯按钮参数设置"
+                        Visibility="{Binding AdButtonParaConfigHide}"
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf0eb;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding AdButtonParaConfigHide_ButtonNum}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                      ItemsSource="{Binding AdButtonParaConfig_ButtonNum_Arr}"        
+                                      SelectedValue="{Binding AdButtonParaConfig_ButtonNum}"
+                                      pu:ComboBoxHelper.Header="按钮编号                : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AdButtonParaConfig_ButtonNum}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding AdButtonParaConfigHide_ButtonRunPattern}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240"
+                                      ItemsSource="{Binding AdButtonParaConfig_ButtonRunPattern_Arr}"       
+                                      SelectedValue="{Binding AdButtonParaConfig_ButtonRunPattern}"
+                                      pu:ComboBoxHelper.Header="按钮灯运行模式      : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AdButtonParaConfig_ButtonRunPattern}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding AdButtonParaConfigHide_LedmodeTimeout}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding AdButtonParaConfig_LedmodeTimeout}"
+                                             pu:TextBoxHelper.Header="Ledmode延时时间 : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_AdButtonParaConfig_LedmodeTimeout}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Width="370"
+                        Header="采集模式设置"
+                        Visibility="{Binding GatherPatternConfigHide}"          
+                        pu:GroupBoxHelper.HeaderPadding="5,10"
+                        pu:GroupBoxHelper.Icon="&#xf0eb;">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding GatherPatternConfigHide_DataUpLoadPattern}">
+                                            <ComboBox Height="25"
+                                      Margin="30,0,0,0"        
+                                      Width="240" 
+                                      ItemsSource="{Binding GatherPatternConfig_DataUpLoadPattern_Arr}"        
+                                      SelectedValue="{Binding GatherPatternConfig_DataUpLoadPattern}"
+                                      pu:ComboBoxHelper.Header="采集器数据上传模式   : "
+                                      pu:ComboBoxHelper.ItemHeight="30"
+                                      pu:ComboBoxHelper.CornerRadius="15">
+                                            </ComboBox>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_GatherPatternConfig_DataUpLoadPattern}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding GatherPatternConfigHide_TimerControllerTriggerTime}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding GatherPatternConfig_TimerControllerTriggerTime}"
+                                             pu:TextBoxHelper.Header="定时器触发时间          : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_GatherPatternConfig_TimerControllerTriggerTime}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding GatherPatternConfigHide_HeartTriggerTime}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding GatherPatternConfig_HeartTriggerTime}"
+                                             pu:TextBoxHelper.Header="采集器心跳时间          : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_GatherPatternConfig_HeartTriggerTime}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding GatherPatternConfigHide_HeratJumpData}">
+                                    <TextBox Height="25"
+                                             Width="240"
+                                             Margin="30,0,0,0"
+                                             Text="{Binding GatherPatternConfig_HeratJumpData}"
+                                             pu:TextBoxHelper.Header="心跳数据                    : "
+                                             pu:TextBoxHelper.CornerRadius="15"/>
+                                    <Button Height="30"
+                                            Width="30"
+                                            Margin="40,0,0,0"
+                                            Command="{Binding Tips_GatherPatternConfig_HeratJumpData}"
+                                            pu:ButtonHelper.Icon="&#xf12a;"
+                                            pu:ButtonHelper.ButtonStyle="Outline"
+                                            pu:ButtonHelper.CornerRadius="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    
+                </ScrollViewer>
+                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <Grid>
+                        <Button x:Name="SerialPortConfigBtn"
+                         Margin="0,0,10,0" 
+                         Grid.Column="0"           
+                        Content="获取参数(串口)" 
+                        Command="{Binding GetParametersSerialPort}"
+                         Visibility="{Binding GetParametersSerialPortHide}"       
+                         pu:ButtonHelper.ButtonStyle="Outline"
+                        pu:ButtonHelper.CornerRadius="15"
+                        Height="30"
+                        Width="120"></Button>
+                        <Button x:Name="ConfigBtn"
+                        Grid.Column="0" 
+                        Content="获取参数(Udp)" 
+                         Margin="0,0,10,0"           
+                        Command="{Binding GetParametersUdp}"
+                         Visibility="{Binding GetParametersUdpHide}"
+                         pu:ButtonHelper.ButtonStyle="Outline"
+                        pu:ButtonHelper.CornerRadius="15"
+                        Height="30"
+                        Width="120"></Button>
+                        <Button x:Name="GetSerialPortConfigBtn"
+                         Margin="0,0,10,0" 
+                         Grid.Column="1"           
+                        Content="配置参数(串口)" 
+                        Command="{Binding ConfigParametersSerialPort}"
+                         Visibility="{Binding ConfigParametersSerialPortHide}"        
+                         pu:ButtonHelper.ButtonStyle="Outline"
+                        pu:ButtonHelper.CornerRadius="15"
+                        Height="30"
+                        Width="120"></Button>
+                        <Button x:Name="GetConfigBtn"
+                        Grid.Column="1" 
+                        Content="配置参数(Udp)" 
+                         Margin="0,0,10,0"           
+                        Command="{Binding ConfigParametersUdp}"
+                          Visibility="{Binding ConfigParametersUdpHide}"       
+                         pu:ButtonHelper.ButtonStyle="Outline"
+                        pu:ButtonHelper.CornerRadius="15"
+                        Height="30"
+                        Width="120"></Button>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="190"/>
+                            <ColumnDefinition Width="190"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                   
+                    
+                </StackPanel>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="550"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                </Grid.RowDefinitions>
+            </Grid>
+        </Grid>
+        <!--状态提示-->
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBlock Text="操作状态:" />
+            <TextBlock Text="{Binding ShowState}" FontStyle="Oblique" Foreground="Red" Width="600" />
+        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="400"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="645"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+    </Grid>
+        </Canvas>
+    </Viewbox>
+</Window>

@@ -1,0 +1,62 @@
+﻿<Window x:Class="RhDevConfigTool.UserSelect"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+        xmlns:local="clr-namespace:RhDevConfigTool"
+        mc:Ignorable="d"
+        DataContext="{Binding Source={StaticResource Locator},Path=UserSelect}" 
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize" 
+        Title="UserSelect" Height="300" Width="500">
+    <Grid>
+        <TextBlock Text="     设备选择" Foreground="Black" FontSize="50" Grid.Column="3" Grid.ColumnSpan="17" Grid.Row="1" Grid.RowSpan="3"></TextBlock>
+        <Button Grid.Column="3" Command="{Binding TopDeviceCpt300}" Grid.Row="5" Grid.ColumnSpan="5" Grid.RowSpan="5" Content="Cpt300" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
+        <Button Grid.Column="9" Command="{Binding TopDeviceADbutton}" Grid.Row="5" Grid.ColumnSpan="5" Grid.RowSpan="5" Content="安灯按钮" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
+        <Button Grid.Column="15" Command="{Binding TopDeviceNbIot}" Grid.Row="5" Grid.ColumnSpan="5" Grid.RowSpan="5" Content="Cat1-Link" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
+        <Button Grid.Column="3" Command="{Binding OpenSensorWindow}" Grid.Row="11" Grid.ColumnSpan="5" Grid.RowSpan="2" Content="传感器" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+    </Grid>
+</Window>

@@ -1,0 +1,32 @@
+﻿<Window x:Class="RhDevConfigTool.SensorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+        xmlns:local="clr-namespace:RhDevConfigTool"
+        DataContext="{Binding Source={StaticResource Locator},Path=Sensor}" 
+        WindowStartupLocation="CenterScreen" 
+        mc:Ignorable="d"
+        Title="SensorView" Height="300" Width="200">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Height="70">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox TextWrapping="Wrap" Text="{Binding InputIo}" Width="120" pu:TextBoxHelper.Header="CPT300输入口" IsEnabled="{Binding InputEnabled}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="启动连接" Command="{Binding StartConn}" />
+                    <Button Content="关闭连接" Command="{Binding CloseConn}" Margin="10,0,0,0"/>
+                    <Button Content="清零" Command="{Binding ClearValue}" Margin="10,0,0,0"/>
+                </StackPanel>
+                
+                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="200">
+                <TextBlock Text="{Binding SensorValue}" Margin="20,10,10,10" Height="50" FontWeight="Bold" FontSize="40"></TextBlock>
+            </StackPanel>
+        </StackPanel>
+        
+    </Grid>
+</Window>
