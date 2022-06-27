@@ -16,6 +16,9 @@ namespace RhDevConfigTool.ViewModel
             m_SimpleIoc.Register<MainViewModel>();
             m_SimpleIoc.Register<UserSelectViewModel>();
             m_SimpleIoc.Register<SensorViewModel>();
+            m_SimpleIoc.Register<SshSftpConfigViewModel>();
+            m_SimpleIoc.Register<UdpConfigViewModel>();
+
         }
 
         public MainViewModel Main
@@ -37,6 +40,20 @@ namespace RhDevConfigTool.ViewModel
             get
             {
                 return m_SimpleIoc.GetInstance<SensorViewModel>();
+            }
+        }
+        public SshSftpConfigViewModel SshSftp
+        {
+            get
+            {
+                return m_SimpleIoc.GetInstance<SshSftpConfigViewModel>();
+            }
+        }
+        public UdpConfigViewModel Udp
+        {
+            get
+            {
+                return m_SimpleIoc.GetInstance<UdpConfigViewModel>();
             }
         }
     }

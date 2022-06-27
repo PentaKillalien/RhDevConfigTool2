@@ -70,7 +70,29 @@ namespace RhDevConfigTool.ViewModel
             }
         });
 
+        /// <summary>
+        /// Udp
+        /// </summary>
+        public RelayCommand<Window> OpenUdpWindow => new RelayCommand<Window>((win) =>
+        {
+            if (win is System.Windows.Window)
+            {
+                new UdpConfigView().Show();
+                (win as System.Windows.Window).Close();
+            }
+        });
 
+        /// <summary>
+        /// 文件传输
+        /// </summary>
+        public RelayCommand<Window> OpenSshStfpWindow => new RelayCommand<Window>((win) =>
+        {
+            if (win is System.Windows.Window)
+            {
+                new SshSftpConfig().Show();
+                (win as System.Windows.Window).Close();
+            }
+        });
 
     }
 }

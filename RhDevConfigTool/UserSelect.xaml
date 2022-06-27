@@ -11,11 +11,13 @@
         ResizeMode="NoResize" 
         Title="UserSelect" Height="300" Width="500">
     <Grid>
-        <TextBlock Text="     设备选择" Foreground="Black" FontSize="50" Grid.Column="3" Grid.ColumnSpan="17" Grid.Row="1" Grid.RowSpan="3"></TextBlock>
+        <TextBlock Text="功能OR设备选择" Foreground="Black" FontSize="50" Grid.Column="3" Grid.ColumnSpan="20" Grid.Row="1" Grid.RowSpan="3" Margin="0,0,3,0"></TextBlock>
         <Button Grid.Column="3" Command="{Binding TopDeviceCpt300}" Grid.Row="5" Grid.ColumnSpan="5" Grid.RowSpan="5" Content="Cpt300" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
         <Button Grid.Column="9" Command="{Binding TopDeviceADbutton}" Grid.Row="5" Grid.ColumnSpan="5" Grid.RowSpan="5" Content="安灯按钮" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
         <Button Grid.Column="15" Command="{Binding TopDeviceNbIot}" Grid.Row="5" Grid.ColumnSpan="5" Grid.RowSpan="5" Content="Cat1-Link" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
         <Button Grid.Column="3" Command="{Binding OpenSensorWindow}" Grid.Row="11" Grid.ColumnSpan="5" Grid.RowSpan="2" Content="传感器" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
+        <Button Grid.Column="9" Command="{Binding OpenUdpWindow}" Grid.Row="11" Grid.ColumnSpan="5" Grid.RowSpan="2" Content="Udp配置" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
+        <Button Grid.Column="15" Command="{Binding OpenSshStfpWindow}" Grid.Row="11" Grid.ColumnSpan="5" Grid.RowSpan="2" Content="文件传输配置" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></Button>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="20"/>
